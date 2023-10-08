@@ -36,7 +36,7 @@ export default function DialogBox({setUserDetails,children,title,setIsOpen,isOpe
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <div className="flex min-h-full md:items-center md:justify-center p-4 text-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -46,10 +46,10 @@ export default function DialogBox({setUserDetails,children,title,setIsOpen,isOpe
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-black opacity-90 p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-full md:max-w-md transform overflow-hidden rounded-2xl bg-black opacity-90 p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-[42px] font-semibold leading-6 text-white"
+                    className="relative text-[42px] font-semibold leading-6 text-white"
                   >
                     {title}
                   </Dialog.Title>

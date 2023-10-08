@@ -1,4 +1,5 @@
-import { createRef, useEffect, useState } from "react";
+"use client"
+import React, { createRef, useEffect, useState } from "react";
 import { BsFillPlayCircleFill, BsFillPauseCircleFill } from "react-icons/bs";
 import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import { FiVolume1 } from "react-icons/fi";
@@ -7,8 +8,15 @@ import { Songs } from "@/constants";
 import Image from "next/image";
 import { RootState } from "@/reduxa/store";
 
+interface MusicData{
+  title: string;
+  song_path:string;
+  image_path:string;
+  artist:string;
+}
+
 const AudioPlayer = () => {
-  const audioRef = createRef();
+  const audioRef = createRef<HTMLAudioElement>();
   const [isPlaying, setIsPlaying] = useState(true);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [index, setIndex] = useState(0);
@@ -16,10 +24,10 @@ const AudioPlayer = () => {
 
 
   const handlePlayPause = () => {
-    if (isPlaying) {
+    if (isPlaying && audioRef.current) {
       setIsPlaying(false);
       audioRef.current.pause();
-    } else {
+    } else if(audioRef.current){
       setIsPlaying(true);
       audioRef.current.play();
     }
@@ -27,7 +35,7 @@ const AudioPlayer = () => {
 
   const handleSongVolume = (value: string) => {
     const vol = parseInt(value);
-    audioRef.current.volume = vol / 10;
+    if(audioRef.current) audioRef.current.volume = vol / 10;
   };
 
   const changeSong = async (direction: string) => {
@@ -53,28 +61,30 @@ const AudioPlayer = () => {
   };
 
   return (
-    <div className="fixed flex flex-row gap-5 items-center bg-black h-20 bottom-0 min-w-full">
+    <div className="fixed flex flex-row gap-5 items-center bg-black h-20 bottom-10 md:bottom-0 xl:bottom-0 min-w-full">
       <audio
         id="mymusic"
         autoPlay
         onPlay={()=>setIsPlaying(true)}
-        onTimeUpdate={(e) =>
-          setElapsedTime(Math.round((e.target.currentTime * 100) / e.target.duration))
+        onTimeUpdate={(e) =>{
+          const target = e.target as HTMLAudioElement
+          setElapsedTime(Math.round((target.currentTime * 100) / target.duration))
+        }
         }
         onEnded={() => setIsPlaying(false)}
         ref={audioRef}
-        src={`https://silvnvkycirpivecnxiy.supabase.co/storage/v1/object/public/songs/${musicdata.song_path}`}
+        src={`https://silvnvkycirpivecnxiy.supabase.co/storage/v1/object/public/songs/${musicdata?.song_path}`}
       />
       <Image
         alt="titleImg"
         className="ml-5 hidden md:block"
-        src={`https://silvnvkycirpivecnxiy.supabase.co/storage/v1/object/public/images/${musicdata.image_path}`}
+        src={`https://silvnvkycirpivecnxiy.supabase.co/storage/v1/object/public/images/${musicdata?.image_path}`}
         height={50}
         width={50}
       />
       <div className="flex flex-col">
-        <p className="text-white hidden md:block xl:block w-full">{musicdata.title}</p>
-        <p className="text-gray-500 text-sm hidden md:block xl:block w-full">{musicdata.artist}</p>
+        <p className="text-white hidden md:block xl:block w-full">{musicdata?.title}</p>
+        <p className="text-gray-500 text-sm hidden md:block xl:block w-full">{musicdata?.artist}</p>
       </div>
       <div className="flex flex-col items-center gap-2 mx-4 flex-grow  md:max-w-md">
         <div className="flex gap-5">

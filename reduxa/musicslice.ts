@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface MusicState {
-    music:Object
+    music:{
+        title:string,artist:string,image_path:string,song_path:string
+    }
 }
 
 const initialState:MusicState = {

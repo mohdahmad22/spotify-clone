@@ -3,8 +3,11 @@ import React, { createRef, useState } from 'react'
 import { DialogBox, Input, Spinner, supabase } from '..'
 
 
+interface SignUPLoginProps{
+  setIsLoggedIn:(t:boolean)=>void;
+}
 
-const SignUPLogin = ({setIsLoggedIn}) => {
+const SignUPLogin = ({setIsLoggedIn}:SignUPLoginProps) => {
   let [isOpen, setIsOpen] = useState(false)
   const [isLoading,setIsLoading]=useState(false);
   const [newUser,setUserType] = useState(false);
@@ -25,9 +28,9 @@ const SignIN=async(email:string,password:string)=>{
         email:email,
         password:password
     })
-    if(data.session && data.session.user){
-      localStorage.setItem("access_token",data.session?.access_token);
-      localStorage.setItem("email",data.session?.user.email);
+    if(data.session && data.session.user && data.session?.user.email){
+      localStorage.setItem("access_token",data.session.access_token);
+      localStorage.setItem("email",data.session.user.email);
       setIsLoggedIn(true)
       setIsLoading(false)
     }

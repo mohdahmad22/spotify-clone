@@ -13,19 +13,21 @@ title:string
 }
 
 const CreateSong = () => {
-  const [song,setSong]=useState({artist:'',title:'',song:null,image:null})
+  const [song,setSong]=useState({artist:'',title:''})
+  const [songFile,setSongFile] = useState<File | null>(null)
+  const [imageFile,setImageFile] = useState<File | null>(null)
   const [isOpen,setIsOpen]=useState(false);
   const [songData,setSongData] = useState<Array<SongDataob>>([]);
   const [IsLoading, setIsLoading] = useState(false);
 
   const handleSubmit=async()=>{
     setIsLoading(true)
-    if(song.image && song.song){
-      const { data:SongData,error:SongError} = await supabase.storage.from("songs").upload(`songs-${song.title}`,song.song,{
+    if(songFile && imageFile){
+      const { data:SongData,error:SongError} = await supabase.storage.from("songs").upload(`songs-${song.title}`,songFile,{
         cacheControl:'3600',
         upsert:false
       })
-      const { data:ImageData,error:ImageError} = await supabase.storage.from("images").upload(`images-${song.title}`,song.image,{
+      const { data:ImageData,error:ImageError} = await supabase.storage.from("images").upload(`images-${song.title}`,imageFile,{
         cacheControl:'3600',
         upsert:false
       })
@@ -41,7 +43,9 @@ const CreateSong = () => {
         setIsLoading(false)
       }
     }
-    setSong({artist:'',title:'',song:null,image:null})
+    setSong({artist:'',title:''})
+    setImageFile(null)
+    setSongFile(null)
     toast.success("Song Created") 
   }
   const deleteSong=async()=>{
@@ -102,13 +106,22 @@ const CreateSong = () => {
             onChange={(e)=>setSong({...song,artist:e.target.value})}
             />
             <Input
-            onChange={(e)=>setSong({...song,song:e.target.files[0]})}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+              if(!e.target.files) return;
+              setSongFile(e.target.files[0])
+            }}
              accept='.mp3' placeholder='song file' label='song file' type='file' />
             <Input 
-            onChange={(e)=>setSong({...song,image:e.target.files[0]})}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+              if(!e.target.files) return;
+              setImageFile(e.target.files[0])
+            }}
              accept='image/*' placeholder='Image file' label='Image file' type='file' />
             <button onClick={handleSubmit} className="text-black font-semibold bg-green-500 rounded-full py-3">
               upload
+            </button>  
+            <button onClick={()=>setIsOpen(false)} className="text-black font-semibold bg-green-500 rounded-full py-3">
+              close
             </button>
         </div>
             </DialogBox>   

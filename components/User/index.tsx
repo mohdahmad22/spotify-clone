@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import { Spinner } from "..";
 import {TfiUser} from "react-icons/tfi"
 const User = () => {
-  let [user, setUser] = useState('')
-
+  let [user, setUser] = useState('');
   const [isLoading,setIsLoading]=useState(false);
 
   useEffect(()=>{
     const user = localStorage.getItem("email")
-    setUser(user)
+    if(user) setUser(user);
   })
 
   if(isLoading){
