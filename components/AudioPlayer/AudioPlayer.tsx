@@ -77,7 +77,7 @@ const AudioPlayer = () => {
       />
       <Image
         alt="titleImg"
-        className="ml-5 hidden md:block"
+        className="md:ml-5 hidden md:block"
         src={`https://silvnvkycirpivecnxiy.supabase.co/storage/v1/object/public/images/${musicdata?.image_path}`}
         height={50}
         width={50}

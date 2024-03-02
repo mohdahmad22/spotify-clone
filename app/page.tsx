@@ -56,7 +56,8 @@ const Home = () => {
                 songData && songData.map((song)=>(
                   <SongCard
                   key={song.id} 
-                  title={song.title} 
+                  title={song.title}
+                  type='L'
                   artist={song.artist} 
                   image_path={song.image_path} 
                   song_path={song.song_path}
